@@ -1,0 +1,500 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Angela's Birthday Card</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,500;0,6..96,800;1,6..96,500;1,6..96,800&family=Caveat+Brush&family=Figtree:wght@400;500;700&display=swap">
+<style>
+/* Layout: a glossy gossip-magazine birthday issue. One tall column, big left-set
+   Bodoni headlines, scribbled red margin notes, tilted "sticker" panels. */
+:root {
+  color-scheme: light;
+  --paper: #fffafb;
+  --blush: #ffe4ec;
+  --pink: #ff6b9d;
+  --red: #e0103c;
+  --wine: #3d0a1a;
+  --gold: #f2b84b;
+  --soft: #8a5566;
+  --display: "Bodoni Moda", "Didot", "Times New Roman", serif;
+  --scrawl: "Caveat Brush", "Segoe Print", "Comic Sans MS", cursive;
+  --body: "Figtree", "Segoe UI", system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background:
+    radial-gradient(60rem 30rem at 110% -5%, var(--blush), transparent 60%),
+    radial-gradient(40rem 26rem at -20% 35%, var(--blush), transparent 60%),
+    var(--paper);
+  color: var(--wine);
+  font-family: var(--body);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+#fx {
+  position: fixed; inset: 0; width: 100%; height: 100%;
+  pointer-events: none; z-index: 50;
+}
+
+.page {
+  max-width: 46rem;
+  margin: 0 auto;
+  padding-inline: 1.25rem;
+  padding-block: 2.5rem 4rem;
+  display: flex; flex-direction: column; gap: 4.5rem;
+}
+
+h1, h2 { font-family: var(--display); font-weight: 800; line-height: .95; margin: 0; text-wrap: balance; }
+h2 { font-size: clamp(2rem, 8vw, 3.25rem); letter-spacing: -.01em; }
+p { margin: 0; }
+section { display: flex; flex-direction: column; gap: 1.25rem; }
+
+.scrawl { font-family: var(--scrawl); color: var(--red); line-height: 1.1; }
+.kicker {
+  font-size: .75rem; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: var(--soft);
+}
+.lede { max-width: 34rem; }
+
+button { font-family: inherit; color: inherit; }
+button:focus-visible { outline: 3px solid var(--wine); outline-offset: 3px; }
+
+.btn {
+  align-self: flex-start;
+  border: 0; cursor: pointer;
+  background: var(--red); color: var(--paper);
+  font-weight: 700; font-size: 1rem;
+  padding: .85rem 1.4rem; border-radius: 999px;
+  box-shadow: 0 .35rem 0 var(--wine);
+  transition: transform .12s, box-shadow .12s;
+}
+.btn:hover { transform: translateY(-2px); box-shadow: 0 .5rem 0 var(--wine); }
+.btn:active { transform: translateY(.3rem); box-shadow: 0 .05rem 0 var(--wine); }
+
+/* ---------- hero ---------- */
+.hero { gap: 1rem; padding-top: 1rem; }
+.hero .to {
+  font-size: clamp(2rem, 9vw, 3.4rem);
+  transform: rotate(-4deg); transform-origin: left bottom;
+  display: inline-flex; align-items: center; gap: .4rem; align-self: flex-start;
+  animation: drop .7s cubic-bezier(.2,1.4,.4,1) both;
+}
+.heart-btn {
+  border: 0; background: none; cursor: pointer; padding: 0 .1em; font-size: 1em; line-height: 1;
+  animation: beat 1.1s ease-in-out infinite;
+}
+.hero h1 { font-size: clamp(3.4rem, 17vw, 8rem); letter-spacing: -.03em; }
+.hero h1 .name {
+  display: block; font-style: italic; padding-right: .1em;
+  background: linear-gradient(100deg, var(--red) 0%, var(--pink) 30%, #fff3c9 45%, var(--pink) 55%, var(--red) 100%);
+  background-size: 250% 100%;
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  animation: shimmer 3.2s linear infinite;
+}
+.hero .lede { font-size: 1.2rem; }
+
+/* ---------- flip cards ---------- */
+.flips { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: 1rem; }
+.flip {
+  perspective: 60rem; border: 0; background: none; padding: 0; cursor: pointer;
+  text-align: left; font-size: inherit; min-width: 0;
+}
+.flip-inner {
+  display: grid; height: 100%;
+  transform-style: preserve-3d; transition: transform .65s cubic-bezier(.3,1.3,.5,1);
+}
+.flip[aria-pressed="true"] .flip-inner { transform: rotateY(180deg); }
+.face {
+  grid-area: 1 / 1; display: flex; flex-direction: column; gap: .75rem; justify-content: space-between;
+  min-height: 11rem; padding: 1.25rem; border-radius: 1.25rem;
+  -webkit-backface-visibility: hidden; backface-visibility: hidden;
+}
+.face.front { background: var(--wine); color: var(--paper); }
+.face.back { background: var(--pink); color: var(--wine); transform: rotateY(180deg); }
+.face .say { font-family: var(--display); font-weight: 500; font-size: 1.35rem; line-height: 1.15; }
+.face.back .say { font-style: italic; }
+.face .tag { font-size: .75rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; opacity: .8; }
+.flip:nth-child(odd) { transform: rotate(-1.2deg); }
+.flip:nth-child(even) { transform: rotate(1deg); }
+
+/* ---------- elder section ---------- */
+.elder {
+  background: var(--red); color: var(--paper);
+  padding: 2rem 1.5rem; border-radius: 1.75rem; transform: rotate(-.8deg);
+  box-shadow: .6rem .6rem 0 var(--wine);
+}
+.elder .kicker { color: var(--blush); }
+.elder .scrawl { color: var(--paper); font-size: 1.6rem; }
+.arena {
+  position: relative; height: 11rem; border-radius: 1rem;
+  background: var(--paper); color: var(--wine); overflow: hidden;
+}
+.arena button {
+  position: absolute; border: 2px solid var(--wine); border-radius: 999px;
+  padding: .6rem 1rem; font-weight: 700; font-size: .95rem; cursor: pointer; white-space: nowrap;
+}
+#right { left: .9rem; top: .9rem; background: var(--pink); }
+#wrong { left: .9rem; top: 6.5rem; background: var(--paper); transition: left .22s ease-out, top .22s ease-out; }
+#verdict { font-weight: 700; min-height: 1.6em; }
+
+/* ---------- meter ---------- */
+.meter { display: flex; height: 3.25rem; border-radius: 999px; overflow: hidden; border: 3px solid var(--wine); }
+.meter .love {
+  flex: 99; display: flex; align-items: center; padding-left: 1.1rem; font-weight: 700; color: var(--paper);
+  background: linear-gradient(90deg, var(--red), var(--pink));
+}
+.meter .hate { flex: 1; background: var(--wine); }
+.legend { display: flex; flex-wrap: wrap; gap: .4rem 1.5rem; font-size: .92rem; color: var(--soft); }
+.legend b { color: var(--wine); }
+
+/* ---------- cake ---------- */
+.cake-wrap { display: flex; flex-direction: column; align-items: center; gap: 1.25rem; }
+.cake { width: min(18rem, 100%); display: flex; flex-direction: column; align-items: center; }
+.candles { display: flex; gap: 1.1rem; align-items: flex-end; }
+.candle {
+  position: relative; width: 1.1rem; height: 3.4rem; border: 0; padding: 0; cursor: pointer; border-radius: .3rem .3rem 0 0;
+  background: repeating-linear-gradient(135deg, var(--paper) 0 .35rem, var(--red) .35rem .7rem);
+  box-shadow: inset 0 0 0 2px var(--wine);
+  margin-top: 2.2rem;
+}
+.candle::before {
+  content: ""; position: absolute; left: 50%; bottom: 100%; width: .9rem; height: 1.5rem;
+  transform: translateX(-50%); transform-origin: 50% 100%;
+  background: radial-gradient(ellipse at 50% 75%, #fff6c7 0 25%, var(--gold) 45%, var(--red) 100%);
+  border-radius: 50% 50% 50% 50% / 65% 65% 35% 35%;
+  animation: flicker .5s ease-in-out infinite alternate;
+}
+.candle.out { cursor: default; }
+.candle.out::before {
+  animation: none; background: var(--soft); width: .2rem; height: .9rem; opacity: .45; border-radius: .2rem;
+}
+.tier { border: 3px solid var(--wine); border-bottom: 0; border-radius: 1rem 1rem 0 0; }
+.tier.top {
+  width: 72%; height: 3.4rem;
+  background: radial-gradient(circle at .9rem 0, var(--paper) .9rem, transparent .95rem) 0 0 / 1.8rem 1.6rem repeat-x, var(--pink);
+}
+.tier.base {
+  width: 100%; height: 4.2rem; border-bottom: 3px solid var(--wine); border-radius: 1rem 1rem .4rem .4rem;
+  background: radial-gradient(circle at .9rem 0, var(--pink) .9rem, transparent .95rem) 0 0 / 1.8rem 1.6rem repeat-x, var(--blush);
+}
+.wish {
+  text-align: center; font-family: var(--display); font-style: italic; font-weight: 500;
+  font-size: 1.5rem; line-height: 1.2; max-width: 28rem;
+  animation: drop .6s cubic-bezier(.2,1.4,.4,1) both;
+}
+.hint { color: var(--soft); text-align: center; }
+
+/* ---------- letter ---------- */
+.letter {
+  background: var(--paper); border: 3px solid var(--wine); border-radius: 1.75rem;
+  padding: 2rem 1.5rem; transform: rotate(.6deg); box-shadow: -.6rem .6rem 0 var(--pink);
+}
+.letter p { max-width: 34rem; }
+.letter .sign { font-size: 2rem; }
+.letter .ps { font-size: .95rem; color: var(--soft); }
+
+footer { text-align: center; font-size: .85rem; color: var(--soft); }
+
+@keyframes shimmer { to { background-position: -250% 0; } }
+@keyframes beat { 0%, 100% { transform: scale(1); } 20% { transform: scale(1.25); } 40% { transform: scale(1); } 55% { transform: scale(1.15); } }
+@keyframes drop { from { opacity: 0; translate: 0 -1.5rem; } to { opacity: 1; translate: 0 0; } }
+@keyframes flicker { from { transform: translateX(-50%) scale(1) rotate(-3deg); } to { transform: translateX(-50%) scale(1.12, .92) rotate(3deg); } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before { animation: none !important; transition: none !important; }
+  html { scroll-behavior: auto; }
+}
+</style>
+
+<canvas id="fx" aria-hidden="true"></canvas>
+
+<main class="page">
+
+  <section class="hero">
+    <p class="kicker">The birthday issue &middot; one copy printed</p>
+    <p class="scrawl to">To my favorite hoe
+      <button class="heart-btn" id="heart" type="button" aria-label="Tap the heart">❤️</button>
+    </p>
+    <h1>Happy Birthday, <span class="name">Angela</span></h1>
+    <p class="lede">Another year older. Still younger than me, though. We will get to that. First, you deserve a mess.</p>
+    <button class="btn" id="rain" type="button">Make it rain</button>
+  </section>
+
+  <section>
+    <p class="kicker">Exhibit A</p>
+    <h2>Why I put up with you</h2>
+    <p class="lede">Four complaints I have filed against you. Tap each one to read what I actually mean.</p>
+    <div class="flips">
+      <button class="flip" type="button" aria-pressed="false">
+        <span class="flip-inner">
+          <span class="face front"><span class="say">You say &ldquo;I&rsquo;m on my way&rdquo; while still in bed.</span><span class="tag">Tap to flip</span></span>
+          <span class="face back"><span class="say">And I would still wait for you. Complaining the whole time, but waiting.</span><span class="tag">The truth</span></span>
+        </span>
+      </button>
+      <button class="flip" type="button" aria-pressed="false">
+        <span class="flip-inner">
+          <span class="face front"><span class="say">You are loud, dramatic, and wrong about 60% of the time.</span><span class="tag">Tap to flip</span></span>
+          <span class="face back"><span class="say">You are also the first person I want to tell everything to.</span><span class="tag">The truth</span></span>
+        </span>
+      </button>
+      <button class="flip" type="button" aria-pressed="false">
+        <span class="flip-inner">
+          <span class="face front"><span class="say">You have never once taken my advice.</span><span class="tag">Tap to flip</span></span>
+          <span class="face back"><span class="say">Maybe sometimes you are right. Strong on maybe.</span><span class="tag">The truth</span></span>
+        </span>
+      </button>
+      <button class="flip" type="button" aria-pressed="false">
+        <span class="flip-inner">
+          <span class="face front"><span class="say">Genuinelly annoying</span><span class="tag">Tap to flip</span></span>
+          <span class="face back"><span class="say">You are gorgeous and you know it.(gonna throw up)</span><span class="tag">The truth</span></span>
+        </span>
+      </button>
+    </div>
+  </section>
+
+  <section class="elder">
+    <p class="kicker">Public service announcement</p>
+    <h2>Let the record show: I am older than you.</h2>
+    <p class="lede">I was here first. I have seen more. That makes me wiser, and it means you have to listen to me. Those are the rules, and no birthday of yours will ever change them.</p>
+    <p class="scrawl">Quick quiz. Who is older?</p>
+    <div class="arena" id="arena">
+      <button id="right" type="button">You are, wise elder</button>
+      <button id="wrong" type="button">Me, Angela</button>
+    </div>
+    <p id="verdict" role="status">Choose carefully.</p>
+  </section>
+
+  <section>
+    <p class="kicker">For the avoidance of doubt</p>
+    <h2>It is all love</h2>
+    <p class="lede">I checked the numbers. Here is the official breakdown of how I feel about you.</p>
+    <div class="meter" role="img" aria-label="99 percent love, 1 percent hate">
+      <span class="love">99% love</span><span class="hate"></span>
+    </div>
+    <p class="legend"><span><b>99% love</b>, all day, every day</span><span><b>1% hate</b>, reserved for when you leave me on read</span></p>
+  </section>
+
+  <section>
+    <p class="kicker">Your one job today</p>
+    <h2>Blow out the candles</h2>
+    <div class="cake-wrap">
+      <div class="cake">
+        <div class="candles" id="candles">
+          <button class="candle" type="button" aria-label="Blow out candle 1"></button>
+          <button class="candle" type="button" aria-label="Blow out candle 2"></button>
+          <button class="candle" type="button" aria-label="Blow out candle 3"></button>
+          <button class="candle" type="button" aria-label="Blow out candle 4"></button>
+          <button class="candle" type="button" aria-label="Blow out candle 5"></button>
+        </div>
+        <div class="tier top"></div>
+        <div class="tier base"></div>
+      </div>
+      <p class="hint" id="hint">Tap every candle to blow it out. Something happens when they are all gone.</p>
+      <p class="wish" id="wish" hidden>Wish granted. You get me for another year. No refunds, no exchanges.</p>
+    </div>
+  </section>
+
+  <section class="letter">
+    <p class="kicker">The serious part (short, I promise)</p>
+    <h2>Angela,</h2>
+    <p>In case the jokes got out of hand: it is all love. I tease you because I know you, and I know you because you are my person.</p>
+    <p>Thank you for being the weird, staying the most, and never letting me be right. I hope this year gives you everything you have been asking for, and money for the things I've been asking for.</p>
+    <p>Happy birthday, Angela. I love you. Do not make it weird.</p>
+    <p class="scrawl sign">Wabacha</p>
+    <p class="ps">P.S. Still older.</p>
+    <button class="btn" id="finale" type="button">One more time for the birthday girl</button>
+  </section>
+
+  <footer>I'm broke so this is the best you getting.</footer>
+</main>
+
+<script>
+(function () {
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var cv = document.getElementById('fx'), ctx = cv.getContext('2d');
+  var W = 0, H = 0, parts = [], twinkles = [], running = false, last = 0;
+  var COLORS = ['#e0103c', '#ff6b9d', '#ffb3cb', '#f2b84b', '#ff3b6e'];
+
+  function rand(a, b) { return a + Math.random() * (b - a); }
+  function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+  function size() {
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    W = window.innerWidth; H = window.innerHeight;
+    cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  size();
+  window.addEventListener('resize', size);
+
+  for (var i = 0; i < 55; i++) {
+    twinkles.push({ x: Math.random(), y: Math.random(), r: rand(1.5, 4), ph: rand(0, 6.28), sp: rand(1, 3), c: pick(['#f2b84b', '#ff6b9d', '#e0103c']) });
+  }
+
+  function star(x, y, r) {
+    ctx.beginPath();
+    ctx.moveTo(x, y - r);
+    ctx.quadraticCurveTo(x, y, x + r, y);
+    ctx.quadraticCurveTo(x, y, x, y + r);
+    ctx.quadraticCurveTo(x, y, x - r, y);
+    ctx.quadraticCurveTo(x, y, x, y - r);
+    ctx.fill();
+  }
+  function heart(s) {
+    ctx.beginPath();
+    ctx.moveTo(0, s * 0.35);
+    ctx.bezierCurveTo(-s, -s * 0.3, -s * 0.45, -s, 0, -s * 0.4);
+    ctx.bezierCurveTo(s * 0.45, -s, s, -s * 0.3, 0, s * 0.35);
+    ctx.fill();
+  }
+
+  function tick(now) {
+    var dt = Math.min((now - last) / 16.7, 3) || 1;
+    last = now;
+    ctx.clearRect(0, 0, W, H);
+
+    if (!reduced) {
+      for (var t = 0; t < twinkles.length; t++) {
+        var tw = twinkles[t];
+        var a = (Math.sin(now / 1000 * tw.sp + tw.ph) + 1) / 2;
+        ctx.globalAlpha = a * 0.75;
+        ctx.fillStyle = tw.c;
+        star(tw.x * W, tw.y * H, tw.r * (0.6 + a));
+      }
+    }
+
+    for (var j = parts.length - 1; j >= 0; j--) {
+      var p = parts[j];
+      p.vy += p.g * dt; p.vx *= 0.99;
+      p.x += p.vx * dt; p.y += p.vy * dt; p.rot += p.vr * dt; p.life -= dt;
+      if (p.life <= 0 || p.y > H + 40) { parts.splice(j, 1); continue; }
+      ctx.globalAlpha = Math.min(1, p.life / 25);
+      ctx.fillStyle = p.c;
+      if (p.shape === 'star') { star(p.x, p.y, p.s); continue; }
+      ctx.save();
+      ctx.translate(p.x, p.y); ctx.rotate(p.rot);
+      if (p.shape === 'heart') heart(p.s);
+      else if (p.shape === 'dot') { ctx.beginPath(); ctx.arc(0, 0, p.s * 0.5, 0, 6.28); ctx.fill(); }
+      else { ctx.scale(1, Math.cos(p.rot * 2)); ctx.fillRect(-p.s / 2, -p.s / 4, p.s, p.s / 2); }
+      ctx.restore();
+    }
+    ctx.globalAlpha = 1;
+
+    if (!reduced || parts.length) requestAnimationFrame(tick);
+    else running = false;
+  }
+  function kick() {
+    if (running) return;
+    running = true; last = performance.now();
+    requestAnimationFrame(tick);
+  }
+
+  function burst(x, y, n, angle, spread, power) {
+    if (reduced) n = Math.ceil(n / 4);
+    for (var i = 0; i < n; i++) {
+      var a = angle + rand(-spread, spread), v = rand(power * 0.4, power);
+      parts.push({
+        x: x, y: y, vx: Math.cos(a) * v, vy: Math.sin(a) * v, g: 0.28,
+        rot: rand(0, 6.28), vr: rand(-0.25, 0.25), s: rand(7, 14),
+        c: pick(COLORS), shape: pick(['rect', 'rect', 'rect', 'dot', 'heart', 'star']), life: rand(110, 190)
+      });
+    }
+    kick();
+  }
+  function cannons() {
+    burst(0, H, 90, -Math.PI / 3, 0.5, 22);
+    burst(W, H, 90, -2 * Math.PI / 3, 0.5, 22);
+  }
+  function fromEl(el, n) {
+    var r = el.getBoundingClientRect();
+    burst(r.left + r.width / 2, r.top + r.height / 2, n, -Math.PI / 2, Math.PI, 13);
+  }
+  function heartRain() {
+    var count = reduced ? 12 : 70;
+    for (var i = 0; i < count; i++) {
+      parts.push({
+        x: rand(0, W), y: rand(-H * 0.8, -20), vx: rand(-0.5, 0.5), vy: rand(2, 5), g: 0.02,
+        rot: rand(-0.4, 0.4), vr: rand(-0.02, 0.02), s: rand(10, 22),
+        c: pick(['#e0103c', '#ff6b9d', '#ff3b6e']), shape: 'heart', life: 400
+      });
+    }
+    kick();
+  }
+
+  // glitter trail under the pointer
+  var lastTrail = 0;
+  if (!reduced) {
+    window.addEventListener('pointermove', function (e) {
+      var now = performance.now();
+      if (now - lastTrail < 35) return;
+      lastTrail = now;
+      parts.push({
+        x: e.clientX + rand(-6, 6), y: e.clientY + rand(-6, 6), vx: rand(-0.6, 0.6), vy: rand(-0.6, 0.4), g: 0.03,
+        rot: 0, vr: 0, s: rand(3, 7), c: pick(['#f2b84b', '#ff6b9d', '#e0103c']), shape: 'star', life: rand(25, 45)
+      });
+    }, { passive: true });
+  }
+
+  // hero
+  document.getElementById('rain').addEventListener('click', function () { fromEl(this, 60); cannons(); });
+  document.getElementById('finale').addEventListener('click', function () { fromEl(this, 80); cannons(); heartRain(); });
+  document.getElementById('heart').addEventListener('click', function () { fromEl(this, 20); heartRain(); });
+
+  // flip cards
+  Array.prototype.forEach.call(document.querySelectorAll('.flip'), function (card) {
+    card.addEventListener('click', function () {
+      var on = card.getAttribute('aria-pressed') === 'true';
+      card.setAttribute('aria-pressed', on ? 'false' : 'true');
+      if (!on) fromEl(card, 14);
+    });
+  });
+
+  // the quiz with a wrong answer that runs away
+  var arena = document.getElementById('arena'), wrong = document.getElementById('wrong'),
+      right = document.getElementById('right'), verdict = document.getElementById('verdict'), dodges = 0;
+  var TAUNTS = ['Nope.', 'Too slow.', 'Try again, youngster.', 'Your young reflexes are failing you.',
+    'You can chase it all day. The answer does not change.'];
+  function dodge() {
+    var maxX = Math.max(8, arena.clientWidth - wrong.offsetWidth - 8);
+    var maxY = Math.max(64, arena.clientHeight - wrong.offsetHeight - 8);
+    wrong.style.left = rand(8, maxX) + 'px';
+    wrong.style.top = rand(64, maxY) + 'px';
+    verdict.textContent = TAUNTS[Math.min(dodges, TAUNTS.length - 1)];
+    dodges++;
+  }
+  wrong.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse') dodge(); });
+  wrong.addEventListener('pointerdown', function (e) { e.preventDefault(); dodge(); });
+  wrong.addEventListener('click', function () { verdict.textContent = 'Nice try. Still wrong. I am older.'; });
+  right.addEventListener('click', function () {
+    verdict.textContent = 'Correct. Respect your elders, birthday girl.';
+    fromEl(right, 50);
+  });
+
+  // candles
+  var candles = document.querySelectorAll('.candle'), left = candles.length;
+  Array.prototype.forEach.call(candles, function (c) {
+    c.addEventListener('click', function () {
+      if (c.classList.contains('out')) return;
+      c.classList.add('out');
+      c.setAttribute('aria-label', 'Candle blown out');
+      var r = c.getBoundingClientRect();
+      burst(r.left + r.width / 2, r.top - 14, 10, -Math.PI / 2, 0.9, 6);
+      left--;
+      if (left === 0) {
+        document.getElementById('hint').hidden = true;
+        document.getElementById('wish').hidden = false;
+        cannons(); heartRain();
+      }
+    });
+  });
+
+  // opening burst
+  kick();
+  setTimeout(function () {
+    burst(W * 0.15, -10, 45, Math.PI / 2.4, 0.7, 9);
+    burst(W * 0.85, -10, 45, Math.PI - Math.PI / 2.4, 0.7, 9);
+  }, 450);
+})();
+</script>
+
+</body></html>
